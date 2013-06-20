@@ -1,10 +1,12 @@
-angular.module('nag.singlePanel', [
-  'nag.core'
+angular.module('nag.singlePanel.panel', [
+  'nag.core',
+  'nag.singlePanel.manager'
 ])
 .directive('nagSinglePanel', [
   '$compile',
   'nagHelper',
-  function($compile, nagHelper){
+  'nagSinglePanelManager',
+  function($compile, nagHelper, nagSinglePanelManager){
     return {
       restrict: 'EA',
       require: '?nagExpander',
@@ -14,7 +16,10 @@ angular.module('nag.singlePanel', [
         function($scope) {
           //need to unbind the global events
           $scope.$on('$destroy', function() {
-            $(document).unbind('click.' + $scope.id).unbind('keydown.' + $scope.id);
+            nagSinglePanelManager.remove($scope.id);
+            $(document)
+            //.unbind('click.' + $scope.id)
+            .unbind('keydown.' + $scope.id);
           });
         }
       ],
@@ -45,35 +50,38 @@ angular.module('nag.singlePanel', [
           element.attr('data-single-panel-id', scope.id)
           .addClass('single-panel')
           //this is a custom event that can triggered to close the panel (used below)
-          .bind('single-panel-close', function() {
-            scope.$apply(function() {
-              scope.hide();
-            });
-          });
+//          .bind('single-panel-close', function() {
+//            scope.$apply(function() {
+//              scope.hide();
+//            });
+//          });
 
-          //the escape key should close the panel
-          $(document).bind('keydown.' + scope.id, function(event) {
-            scope.$apply(function() {
-              if(event.which === 27) {
-                scope.hide();
-              }
-            });
-          });
+//          //the escape key should close the panel
+//          $(document).bind('keydown.' + scope.id, function(event) {
+//            scope.$apply(function() {
+//              if(event.which === 27) {
+//                scope.hide();
+//              }
+//            });
+//          });
 
           element.bind('click.' + scope.id, function(event) {
             //when clicking inside the element, we need to stop propagation as we don't wanted to close the panel we are clicking in
             event.stopPropagation();
 
-            //close all other panel except the one that was just created
-            $('.single-panel[data-single-panel-id!=' + scope.id + ']').trigger('single-panel-close');
+//            //close all other panel except the one that was just created
+//            $('.single-panel[data-single-panel-id!=' + scope.id + ']').trigger('single-panel-close');
+              nagSinglePanelManager.closeAll();
           });
 
-          //if we click outside of the panel, close it
-          $(document).bind('click.' + scope.id, function(event) {
-            scope.$apply(function() {
-              scope.hide();
-            });
-          });
+          nagSinglePanelManager.add(scope.id, scope.hide);
+
+//          //if we click outside of the panel, close it
+//          $(document).bind('click.' + scope.id, function(event) {
+//            scope.$apply(function() {
+//              scope.hide();
+//            });
+//          });
         };
       }
     };

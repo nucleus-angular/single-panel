@@ -4,43 +4,35 @@ angular.module('nag.singlePanel.panel', [
 ])
 .directive('nagSinglePanel', [
   '$compile',
+  '$timeout',
   'nagHelper',
   'nagSinglePanelManager',
-  function($compile, nagHelper, nagSinglePanelManager){
+  function($compile, $timeout, nagHelper, nagSinglePanelManager){
     return {
       restrict: 'EA',
-      require: '?nagExpander',
+      require: ['?nagExpander'],
       priority: 0,
       controller: [
         '$scope',
         function($scope) {
-          //need to unbind the global events
           $scope.$on('$destroy', function() {
+            //need to remove the panel
             nagSinglePanelManager.remove($scope.id);
-            $(document)
-            //.unbind('click.' + $scope.id)
-            .unbind('keydown.' + $scope.id);
           });
         }
       ],
       compile: function(element, attributes, transclude) {
-        return function(scope, element, attributes, nagExpanderCtrl) {
+        return function(scope, element, attributes, controllers) {
           //each panel needs a unique id in order to be able to handle events properly
           scope.id = nagHelper.generateId('single-panel');
 
-          //map functionality exposed by the expander controller if it has it
-          if(nagExpanderCtrl) {
-            if(!_.isFunction(scope.hide)) {
-              scope.hide = function() {
-                nagExpanderCtrl.collapse();
+          _.forEach(controllers, function(controller) {
+            while(!_.isFunction(scope.hide)) {
+              if(_.isFunction(controller.hide)) {
+                scope.hide = controller.hide;
               }
             }
-            if(!_.isFunction(scope.hide)) {
-              scope.hide = function() {
-                nagExpanderCtrl.collapse();
-              }
-            }
-          }
+          });
 
           //make sure the scope has a hide method
           if(!_.isFunction(scope.hide)) {
@@ -48,40 +40,19 @@ angular.module('nag.singlePanel.panel', [
           }
 
           element.attr('data-single-panel-id', scope.id)
-          .addClass('single-panel')
-          //this is a custom event that can triggered to close the panel (used below)
-//          .bind('single-panel-close', function() {
-//            scope.$apply(function() {
-//              scope.hide();
-//            });
-//          });
-
-//          //the escape key should close the panel
-//          $(document).bind('keydown.' + scope.id, function(event) {
-//            scope.$apply(function() {
-//              if(event.which === 27) {
-//                scope.hide();
-//              }
-//            });
-//          });
+          .addClass('single-panel');
 
           element.bind('click.' + scope.id, function(event) {
             //when clicking inside the element, we need to stop propagation as we don't wanted to close the panel we are clicking in
             event.stopPropagation();
 
-//            //close all other panel except the one that was just created
-//            $('.single-panel[data-single-panel-id!=' + scope.id + ']').trigger('single-panel-close');
-              nagSinglePanelManager.closeAll();
+            //close all other panel except the one that was just created
+            //todo: fix: using timeout causing the massive amount of scope digests to be called, need to fix
+            //todo: research: I don't think that I should need a $timeout here for this code to work properly
+            $timeout(function(){nagSinglePanelManager.closeAll(scope.id);}, 0);
           });
 
           nagSinglePanelManager.add(scope.id, scope.hide);
-
-//          //if we click outside of the panel, close it
-//          $(document).bind('click.' + scope.id, function(event) {
-//            scope.$apply(function() {
-//              scope.hide();
-//            });
-//          });
         };
       }
     };

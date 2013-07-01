@@ -2,14 +2,16 @@ angular.module('nag.singlePanel.manager', [])
 .factory('nagSinglePanelManager', [
     '$rootScope',
     function($rootScope) {
-        var globalEventsAdded, panels, addGlobalEvents, closeAllPanels;
+        var globalEventsAdded, panels, addGlobalEvents, closePanels;
 
         globalEventsAdded = false;
         panels = {};
 
-        closeAllPanels = function() {
-            _.forEach(panels, function(callback) {
-                callback();
+        closePanels = function(excludeId) {
+            _.forEach(panels, function(callback, panelId) {
+                if(panelId !== excludeId) {
+                    callback()
+                }
             });
         };
 
@@ -17,7 +19,7 @@ angular.module('nag.singlePanel.manager', [])
             //if we click outside of the panel, close it
             $(document).bind('click.single-panel', function(event) {
                 $rootScope.$apply(function() {
-                    closeAllPanels();
+                    closePanels();
                 });
             });
 
@@ -25,7 +27,7 @@ angular.module('nag.singlePanel.manager', [])
             $(document).bind('keydown.single-panel', function(event) {
                 $rootScope.$apply(function() {
                     if(event.which === 27) {
-                        closeAllPanels();
+                        closePanels();
                     }
                 });
             });
@@ -44,8 +46,8 @@ angular.module('nag.singlePanel.manager', [])
             remove: function(panelId) {
                 delete panels[panelId];
             },
-            closeAll: function() {
-                closeAllPanels();
+            closeAll: function(excludeId) {
+                closePanels(excludeId);
             }
         };
     }

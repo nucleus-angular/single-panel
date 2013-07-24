@@ -1,3 +1,9 @@
+/**
+ * Make sure only one single element is active at one point in time
+ *
+ * @module nag.singlePanel.panel
+ * @ngdirective nagSinglePanel
+ */
 angular.module('nag.singlePanel.panel', [
   'nag.core',
   'nag.singlePanel.manager'
@@ -24,6 +30,13 @@ angular.module('nag.singlePanel.panel', [
       compile: function(element, attributes, transclude) {
         return function(scope, element, attributes, controllers) {
           //each panel needs a unique id in order to be able to handle events properly
+          /**
+           * Unique id of the panel
+           *
+           * @ngscope
+           * @property id
+           * @type {string}
+           */
           scope.id = nagHelper.generateId('single-panel');
 
           _.forEach(controllers, function(controller) {
@@ -42,12 +55,11 @@ angular.module('nag.singlePanel.panel', [
           element.attr('data-single-panel-id', scope.id)
           .addClass('single-panel');
 
-          element.bind('click.' + scope.id, function(event) {
-            //when clicking inside the element, we need to stop propagation as we don't wanted to close the panel we are clicking in
+          element.bind('mouseup.' + scope.id, function(event) {
+            //when mouseup inside the element, we need to stop propagation as we don't wanted to close the panel we are clicking in
             event.stopPropagation();
 
             //close all other panel except the one that was just created
-            //todo: fix: using timeout causing the massive amount of scope digests to be called, need to fix
             //todo: research: I don't think that I should need a $timeout here for this code to work properly
             $timeout(function(){nagSinglePanelManager.closeAll(scope.id);}, 0);
           });

@@ -1,8 +1,14 @@
 /**
  * Make sure only one single element is active at one point in time
  *
+ * This directive indicates an element as a single panel element and there can only be one single panel element active at any point in time.  This is usually for example, if you have a number of button dropd own elements but you only want one expanded at at point in time.
+ *
+ * EXAMPLES TODO
+ *
  * @module nag.singlePanel.panel
  * @ngdirective nagSinglePanel
+ *
+ * @nghtmlattribute {null} nag-single-panel
  */
 angular.module('nag.singlePanel.panel', [
   'nag.core',

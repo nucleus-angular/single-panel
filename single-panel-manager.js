@@ -1,6 +1,8 @@
 /**
  * Manages all instances of single panel components
  *
+ * This service is responible for managing all the active instances of single panels.
+ *
  * @module nag.singlePanel.manager
  * @ngservice nagSinglePanelManager
  */

@@ -1,5 +1,7 @@
 /**
- * Nucleus Angular Single Panel
+ * # Single Panel Module
+ *
+ * This module icludes the needed functionality for a single panel component.
  *
  * @module nag.singlePanel
  */

@@ -23,7 +23,7 @@ angular.module('nag.singlePanel.panel', [
     return {
       restrict: 'EA',
       require: ['?nagExpander'],
-      priority: 0,
+      priority: 399,
       controller: [
         '$scope',
         function($scope) {

@@ -23,20 +23,20 @@ angular.module('nag.singlePanel.manager', [])
       });
     };
 
-        addGlobalEvents = function() {
-            //if we click outside of the panel, close it
-            $(document).bind('mouseup.single-panel', function(event) {
-                $rootScope.$apply(function() {
-                    closePanels();
-                });
-            });
+    addGlobalEvents = function() {
+      //if we click outside of the panel, close it
+      $(document).bind('mouseup.single-panel', function(event) {
+        $rootScope.$apply(function() {
+          closePanels();
+        });
+      });
 
-            //the escape key should close the panel
-            $(document).bind('keyup.single-panel', function(event) {
-                $rootScope.$apply(function() {
-                    if(event.which === 27) {
-              closePanels();
-            }
+      //the escape key should close the panel
+      $(document).bind('keyup.single-panel', function(event) {
+        $rootScope.$apply(function() {
+          if(event.which === 27) {
+            closePanels();
+          }
         });
       });
 

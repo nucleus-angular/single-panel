@@ -1,0 +1,10 @@
+.expander {
+  .content,
+  .custom-content {
+    display: none;
+
+    &.is-active {
+      display: inline-block;
+    }
+  }
+}

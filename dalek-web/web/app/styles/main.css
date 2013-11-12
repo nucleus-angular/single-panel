@@ -1,0 +1,6 @@
+.expander .content,
+.expander .custom-content {
+  display: none; }
+  .expander .content.is-active,
+  .expander .custom-content.is-active {
+    display: inline-block; }

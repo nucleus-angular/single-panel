@@ -23,7 +23,7 @@ angular.module('nag.singlePanel.panel', [
     return {
       restrict: 'EA',
       require: ['?nagExpander'],
-      priority: 399,
+      priority: 397,
       controller: [
         '$scope',
         function($scope) {
@@ -36,41 +36,35 @@ angular.module('nag.singlePanel.panel', [
       compile: function(element, attributes, transclude) {
         return function(scope, element, attributes, controllers) {
           //each panel needs a unique id in order to be able to handle events properly
-          /**
-           * Unique id of the panel
-           *
-           * @ngscope
-           * @property id
-           * @type {string}
-           */
-          scope.id = nagHelper.generateId('single-panel');
+          var uniqueId = nagHelper.generateId('single-panel');
+          var hideHandler;
 
           _.forEach(controllers, function(controller) {
-            while(!_.isFunction(scope.hide)) {
+            while(!_.isFunction(hideHandler)) {
               if(_.isFunction(controller.hide)) {
-                scope.hide = controller.hide;
+                hideHandler = controller.hide;
               }
             }
           });
 
           //make sure the scope has a hide method
-          if(!_.isFunction(scope.hide)) {
+          if(!_.isFunction(hideHandler)) {
             throw new Error("There must be a hide method to use the single panel directive");
           }
 
-          element.attr('data-single-panel-id', scope.id)
+          element.attr('data-single-panel-id', uniqueId)
           .addClass('single-panel');
 
-          element.bind('mouseup.' + scope.id, function(event) {
+          element.bind('mouseup.' + uniqueId, function(event) {
             //when mouseup inside the element, we need to stop propagation as we don't wanted to close the panel we are clicking in
             event.stopPropagation();
 
             //close all other panel except the one that was just created
             //todo: research: I don't think that I should need a $timeout here for this code to work properly
-            $timeout(function(){nagSinglePanelManager.closeAll(scope.id);}, 0);
+            $timeout(function(){nagSinglePanelManager.closeAll(uniqueId);}, 0);
           });
 
-          nagSinglePanelManager.add(scope.id, scope.hide);
+          nagSinglePanelManager.add(uniqueId, hideHandler);
         };
       }
     };

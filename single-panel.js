@@ -22,8 +22,8 @@ angular.module('nag.singlePanel.panel', [
   function($compile, $timeout, nagHelper, nagSinglePanelManager){
     return {
       restrict: 'EA',
-      require: ['?nagExpander'],
-      priority: 397,
+      require: nagSinglePanelManager.getSinglePanelDirectives(['nagExpander']),
+      priority: 399,
       controller: [
         '$scope',
         function($scope) {
@@ -40,7 +40,7 @@ angular.module('nag.singlePanel.panel', [
           var hideHandler;
 
           _.forEach(controllers, function(controller) {
-            while(!_.isFunction(hideHandler)) {
+            if(!_.isFunction(hideHandler) && !_.isUndefined(controller)) {
               if(_.isFunction(controller.hide)) {
                 hideHandler = controller.hide;
               }

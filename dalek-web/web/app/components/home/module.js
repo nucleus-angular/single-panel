@@ -19,5 +19,6 @@ angular.module('app.home.routing', [
 
 angular.module('app.home', [
   'app.home.routing',
+  'app.home.customDirective',
   'app.home.home'
 ]);

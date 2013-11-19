@@ -4,3 +4,8 @@
   .expander .content.is-active,
   .expander .custom-content.is-active {
     display: inline-block; }
+
+.custom .c {
+  display: none; }
+  .custom .c.is-active {
+    display: inline-block; }

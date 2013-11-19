@@ -7,10 +7,13 @@ angular.module('app', [
 .config([
   '$locationProvider',
   '$urlRouterProvider',
-  function($locationProvider, $urlRouterProvider) {
+  'nagSinglePanelManagerProvider',
+  function($locationProvider, $urlRouterProvider, nagSinglePanelManagerProvider) {
     $locationProvider.html5Mode(true);
 
     $urlRouterProvider.otherwise('/home');
+
+    nagSinglePanelManagerProvider.setSinglePanelDirectives(['customDirective']);
   }
 ])
 .run([

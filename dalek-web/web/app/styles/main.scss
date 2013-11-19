@@ -8,3 +8,13 @@
     }
   }
 }
+
+.custom {
+  .c {
+    display: none;
+
+    &.is-active {
+      display: inline-block;
+    }
+  }
+}

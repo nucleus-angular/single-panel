@@ -1,0 +1,8 @@
+{
+  "tests": [
+    "dalek/single-panel.js"
+  ],
+  "browser": [
+    "chrome"
+  ]
+}

@@ -10,10 +10,7 @@
  *
  * @nghtmlattribute {null} nag-single-panel
  */
-angular.module('nag.singlePanel.panel', [
-  'nag.core',
-  'nag.singlePanel.manager'
-])
+angular.module('nag.singlePanel')
 .directive('nagSinglePanel', [
   '$compile',
   '$timeout',

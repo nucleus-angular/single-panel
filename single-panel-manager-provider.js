@@ -6,8 +6,7 @@
  * @module nag.singlePanel.manager
  * @ngservice nagSinglePanelManager
  */
-angular.module('nag.singlePanel.manager', [])
-//.factory('nagSinglePanelManager', [
+angular.module('nag.singlePanel')
 .provider('nagSinglePanelManager', [
   function() {
     var singlePanelDirectives = [];

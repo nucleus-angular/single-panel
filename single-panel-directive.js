@@ -5,7 +5,7 @@
  *
  * EXAMPLES TODO
  *
- * @module nag.singlePanel.panel
+ * @module nag.singlePanel
  * @ngdirective nagSinglePanel
  *
  * @nghtmlattribute {null} nag-single-panel

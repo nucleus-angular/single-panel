@@ -2,6 +2,7 @@
   "tests": [
     "dalek/single-panel.js"
   ],
+  "logLevel": "1",
   "browser": [
     "chrome"
   ]

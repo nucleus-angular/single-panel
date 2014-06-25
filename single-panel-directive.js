@@ -34,7 +34,7 @@ angular.module('nag.singlePanel')
       ],
       compile: function(element, attributes, transclude) {
         if(!attributes.id) {
-          throw new Error("Must provide data-id attribute for extend text");
+          throw new Error("Must provide data-id attribute for single panel");
         }
         
         return function(scope, element, attributes, controllers) {

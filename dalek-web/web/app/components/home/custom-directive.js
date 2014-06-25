@@ -14,6 +14,9 @@ angular.module('app.home.customDirective', [
           this.hide = function() {
             $scope.hide();
           }
+          this.show = function() {
+            $scope.show();
+          }
         }
       ],
       compile: function(element) {

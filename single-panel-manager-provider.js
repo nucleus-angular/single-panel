@@ -24,7 +24,7 @@ angular.module('nag.singlePanel')
           closePanels = function(excludeId) {
             _.forEach(panels, function(callback, panelId) {
               if(panelId !== excludeId) {
-                callback()
+                callback();
               }
             });
           };

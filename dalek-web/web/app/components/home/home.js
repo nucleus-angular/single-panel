@@ -16,6 +16,9 @@ angular.module('app.home.home', [
     });
   }
 ])
-.controller('HomeCtrl', ['$scope', function($scope) {
+.controller('HomeCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.name = 'AngularJS Seed';
+  $scope.testEvent = function() {
+    $rootScope.$emit('NagSinglePanel[expander2]/show');
+  }
 }]);

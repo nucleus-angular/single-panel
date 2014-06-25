@@ -9,14 +9,16 @@
  * @ngdirective nagSinglePanel
  *
  * @nghtmlattribute {null} nag-single-panel
+ * @nghtmlattribute {mixed} data-id
  */
 angular.module('nag.singlePanel')
 .directive('nagSinglePanel', [
   '$compile',
   '$timeout',
+  '$rootScope',
   'nagHelper',
   'nagSinglePanelManager',
-  function($compile, $timeout, nagHelper, nagSinglePanelManager){
+  function($compile, $timeout, $rootScope, nagHelper, nagSinglePanelManager){
     return {
       restrict: 'EA',
       require: nagSinglePanelManager.getSinglePanelDirectives(['nagExpander']),
@@ -31,10 +33,15 @@ angular.module('nag.singlePanel')
         }
       ],
       compile: function(element, attributes, transclude) {
+        if(!attributes.id) {
+          throw new Error("Must provide data-id attribute for extend text");
+        }
+        
         return function(scope, element, attributes, controllers) {
           //each panel needs a unique id in order to be able to handle events properly
-          var uniqueId = nagHelper.generateId('single-panel');
+          var uniqueId = attributes.id.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
           var hideHandler;
+          var showHandler;
 
           _.forEach(controllers, function(controller) {
             if(!_.isFunction(hideHandler) && !_.isUndefined(controller)) {
@@ -42,11 +49,16 @@ angular.module('nag.singlePanel')
                 hideHandler = controller.hide;
               }
             }
+            if(!_.isFunction(showHandler) && !_.isUndefined(controller)) {
+              if(_.isFunction(controller.show)) {
+                showHandler = controller.show;
+              }
+            }
           });
 
           //make sure the scope has a hide method
-          if(!_.isFunction(hideHandler)) {
-            throw new Error("There must be a hide method to use the single panel directive");
+          if(!_.isFunction(hideHandler) || !_.isFunction(showHandler)) {
+            throw new Error("There must be a hide and show method to use the single panel directive");
           }
 
           element.attr('data-single-panel-id', uniqueId)
@@ -59,6 +71,11 @@ angular.module('nag.singlePanel')
             //close all other panel except the one that was just created
             //todo: research: I don't think that I should need a $timeout here for this code to work properly
             $timeout(function(){nagSinglePanelManager.closeAll(uniqueId);}, 0);
+          });
+          
+          $rootScope.$on('NagSinglePanel[' + uniqueId + ']/show', function() {
+            //TODO: research: I don't think that I should need a $timeout here for this code to work properly
+            $timeout(function(){nagSinglePanelManager.closeAll(uniqueId);showHandler();}, 0);
           });
 
           nagSinglePanelManager.add(uniqueId, hideHandler);

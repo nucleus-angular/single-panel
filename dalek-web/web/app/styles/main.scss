@@ -1,11 +1,14 @@
 .expander {
+  &.is-active {
+    .content,
+    .custom-content {
+      display: inline-block;
+    }
+  }
+
   .content,
   .custom-content {
     display: none;
-
-    &.is-active {
-      display: inline-block;
-    }
   }
 }
 

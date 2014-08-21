@@ -23,20 +23,12 @@ angular.module('nag.singlePanel')
       restrict: 'EA',
       require: nagSinglePanelManager.getSinglePanelDirectives(['nagExpander']),
       priority: 399,
-      controller: [
-        '$scope',
-        function($scope) {
-          $scope.$on('$destroy', function() {
-            //need to remove the panel
-            nagSinglePanelManager.remove($scope.id);
-          });
-        }
-      ],
+      controller: 'NagSinglePanelDCtrl',
       compile: function(element, attributes, transclude) {
         if(!attributes.id) {
           throw new Error("Must provide data-id attribute for single panel");
         }
-        
+
         return function(scope, element, attributes, controllers) {
           //each panel needs a unique id in order to be able to handle events properly
           var uniqueId = attributes.id.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
@@ -72,7 +64,7 @@ angular.module('nag.singlePanel')
             //todo: research: I don't think that I should need a $timeout here for this code to work properly
             $timeout(function(){nagSinglePanelManager.closeAll(uniqueId);}, 0);
           });
-          
+
           $rootScope.$on('NagSinglePanel[' + uniqueId + ']/show', function() {
             //TODO: research: I don't think that I should need a $timeout here for this code to work properly
             $timeout(function(){nagSinglePanelManager.closeAll(uniqueId);showHandler();}, 0);

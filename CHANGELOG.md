@@ -4,6 +4,7 @@ Each change log are assumed to be accompanied by associated unit test and docume
 
 ## master
 
+- added .editorconfig file
 - added `NagSinglePanel[]/show` event to be able to trigger single panel programmatically
 
 ## 0.5.0

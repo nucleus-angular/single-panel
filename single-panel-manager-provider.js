@@ -13,9 +13,8 @@ angular.module('nag.singlePanel')
 
     return {
       $get: [
-        '$rootScope',
-        function($rootScope) {
-
+        '$timeout',
+        function($timeout) {
           var globalEventsAdded, panels, addGlobalEvents, closePanels, singlePanelManager;
 
           globalEventsAdded = false;
@@ -32,18 +31,18 @@ angular.module('nag.singlePanel')
           addGlobalEvents = function() {
             //if we click outside of the panel, close it
             $(document).bind('mouseup.single-panel', function(event) {
-              $rootScope.$apply(function() {
+              $timeout(function() {
                 closePanels();
-              });
+              }, 0);
             });
 
             //the escape key should close the panel
             $(document).bind('keyup.single-panel', function(event) {
-              $rootScope.$apply(function() {
+              $timeout(function() {
                 if(event.which === 27) {
                   closePanels();
                 }
-              });
+              }, 0);
             });
 
             globalEventsAdded = true;

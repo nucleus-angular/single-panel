@@ -21,7 +21,10 @@ angular.module('nag.singlePanel')
   function($compile, $timeout, $rootScope, nagHelper, nagSinglePanelManager){
     return {
       restrict: 'EA',
-      require: nagSinglePanelManager.getSinglePanelDirectives(['nagExpander']),
+      require: nagSinglePanelManager.getSinglePanelDirectives([
+        'nagExpander',
+        'nagTooltip'
+      ]),
       priority: 399,
       controller: 'NagSinglePanelDCtrl',
       compile: function(element, attributes, transclude) {
